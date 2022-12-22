@@ -1,7 +1,6 @@
-import Categories from './components/categories/categories.component';
-
-const App = () => {
-  const categories = [
+const CategoriesData = () => {
+      return(
+        [
     {
       "id": 1,
       "title": "hats",
@@ -28,10 +27,7 @@ const App = () => {
       "imageUrl": "https://i.ibb.co/R70vBrQ/men.png"
     }
   ]
-
-  return ( 
-    <Categories categories={categories} />
-  );
+      )
 }
-
-export default App;
+  
+  export default CategoriesData
