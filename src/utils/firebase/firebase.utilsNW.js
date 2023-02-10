@@ -14,6 +14,7 @@ import {
   getDoc,//get document data
   setDoc //set document data
 } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
 const firebaseConfig = {
     apiKey: "AIzaSyANqHRAwsCjwUEG4fAFg6CMgTRuktKfZEM",
     authDomain: "crown-db-791ff.firebaseapp.com",
@@ -28,16 +29,28 @@ const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
 prompt: 'select_account',
 });
-
+const user = auth.UserCredential;
+const email = user.email;
+const password = user.password;
 export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 };
 export const auth = getAuth();
+
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();//access db
-
+export const signInWithYourEmailAndPassword = () => signInWithEmailAndPassword(auth, email, password)
+.then((userCredential) => {
+  // Signed in 
+  const user = userCredential.user;
+  // ...
+})
+.catch((error) => {
+  const errorCode = error.code;
+  const errorMessage = error.message;
+});
 export const createUserDocumentFromAuth = async (
   userAuth,additionaInformation = {}
   ) => {
@@ -69,8 +82,4 @@ return userDocRef;
 export const createAuthUserWithEmailAndPassword = async (email,password) => {
   if(!email || !password) return;
   return await createUserWithEmailAndPassword(auth, email, password);
-}
-export const signInAuthUserWithEmailAndPassword = async (email,password) => {
-  if(!email || !password) return;
-  return await signInWithEmailAndPassword(auth, email, password);
 }
