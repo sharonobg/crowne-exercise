@@ -33,10 +33,19 @@ const SignInForm = () => {
             console.log(response)
             resetFormFields();
         } catch(error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('user creation encountered an error', error);
+            switch(error.code){
+                case 'auth/wrong-password':
+                    alert('wrong password or email');
+                break;
+                case 'auth/user-not-found':
+                    alert('no user associate with this email');
+                break;
+                default:
+                console.log(error);
+            }
+            console.log(error);
         }
+            
     };
 
     const handleFormChange = (event) => {
@@ -65,8 +74,10 @@ const SignInForm = () => {
                     name="password" 
                     value={password} 
                 />
+                <div className='buttons-container'>
                 <Button type="submit">Sign In</Button>
                 <Button buttonType="google" onClick={logGoogleUser}>Google Sign in</Button>
+                </div>
             </form>
         </div>
     )
