@@ -1,37 +1,42 @@
  
-import{useState} from 'react';
+import{useState,useContext} from 'react';
 import  FormInput from '../form-input/form-input.component';
-import { signInAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
-import { signInWithGooglePopup, 
-    createUserDocumentFromAuth, 
+import {UserContext} from '../../contexts/user.context';
+import { 
+    signInWithGooglePopup, 
+    signInAuthUserWithEmailAndPassword
 } from "../../utils/firebase/firebase.utils" ;
-import './sign-in-form.styles.scss';
 import Button from '../button/button.component';
+import './sign-in-form.styles.scss';
+
 const defaultFormFields = {
     email: '',
     password: ''   
 }
-const logGoogleUser = async () => {
-    const {user} = await signInWithGooglePopup();
-    const userDocRef = await createUserDocumentFromAuth(user);
-};
+
 const SignInForm = () => {
     const [formFields, setFormFields]= useState(defaultFormFields);
     const {email, password}= formFields;
+    const {setCurrentUser}  = useContext(UserContext);
     const resetFormFields= () => {
         setFormFields(defaultFormFields);
     }
-
+    const logGoogleUser = async () => {
+        const {user} = await signInWithGooglePopup();
+        //const userDocRef = await createUserDocumentFromAuth(user);
+        setCurrentUser(user);
+    };
     const handleSignInSubmit = async (event) => {
         event.preventDefault();
 
         try{
-            const response = await signInAuthUserWithEmailAndPassword(
+            const {user} = await signInAuthUserWithEmailAndPassword(
                 email,
                 password
             );
-            console.log(response)
+            
             resetFormFields();
+            setCurrentUser(user);
         } catch(error) {
             switch(error.code){
                 case 'auth/wrong-password':
@@ -43,9 +48,7 @@ const SignInForm = () => {
                 default:
                 console.log(error);
             }
-            console.log(error);
-        }
-            
+        } 
     };
 
     const handleFormChange = (event) => {
