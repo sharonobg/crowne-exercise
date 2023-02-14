@@ -31,7 +31,6 @@ prompt: 'select_account',
 });
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-
 };
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
@@ -45,10 +44,7 @@ export const createUserDocumentFromAuth = async (
   if(!userAuth) return;
 
  const userDocRef = doc(db, 'users', userAuth.uid);
- {/*console.log(userDocRef);*/}
- 
  const userSnapshot = await getDoc(userDocRef);
-
  if(!userSnapshot.exists()){
   const { displayName, email } = userAuth;
   const createdAt = new Date();
