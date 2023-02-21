@@ -1,62 +1,58 @@
 import{createContext, useState,useEffect} from 'react';
 const addCartItem = (cartItems, productToAdd) => {
-
   const existingCartItem = cartItems.find(
-    (cartItem)=>cartItem.id === productToAdd.id
+    (cartItem)=>cartItem.id=== productToAdd.id
     );
-    console.log(productToAdd);
     if(existingCartItem){
         return cartItems.map( (cartItem) => 
         cartItem.id === productToAdd.id 
         ? {...cartItem, 
             quantity:cartItem.quantity + 1,
-            totalPrice:cartItem.quantity*cartItem.price+cartItem.price
-        }
-        
-        :{...cartItem ,totalPrice:cartItem.price}
-        );  
-        
+            totalItem:cartItem.quantity + 1*cartItem.price}
+        :cartItem 
+        );    
     }
     return(
-        [...cartItems,{...productToAdd,quantity:1,totalPrice:productToAdd.price}]
+        [...cartItems,{...productToAdd,
+            quantity:1,
+            totalItem:productToAdd.price}]
       )
   
     //If found, increment quantity
 
     //return new array with modified cartItems/new cart item
     //return cartItems;
-    //const totalItem =() => {cartItem.price*quantity;}
     
 }
 
 export const CartContext = createContext({
-    isCartOpen:true,
+    isCartOpen:false,
     setIsCartOpen:() => {},
     cartItems: [],
     addItemtoCart: ()=> {},
-    //totals:0,
-    cartItemQuantity: () => {}
+    totalItem: () => {},
+    totalCart: () => {}
 });
 
 export const CartProvider = ({children}) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [cartItems,setCartItems] = useState([]);
-    const [totals,setTotals]=useState(0);
+    const [totalCart,setTotalCart]=useState(0);
+    const [totalItem,setTotalItem]=useState(0);
 
     
     const addItemToCart = (productToAdd) => {
         setCartItems(addCartItem(cartItems,productToAdd));
-        console.log(productToAdd.price) 
     }
     useEffect(() => {
         const newTotals = cartItems.reduce(
             (total, cartItem) => total + cartItem.quantity,0)
-            setTotals(newTotals);
+            
         },[cartItems]);
-    const value = {isCartOpen,setIsCartOpen,addItemToCart,cartItems,totals };
-    console.log(cartItems)
-    
-    console.log(totals)
+    const value = {isCartOpen,setIsCartOpen,addItemToCart,cartItems,totalItem,setTotalItem,totalCart,setTotalCart };
+    console.log({children})
+    console.log({cartItems})
+    console.log('cartItems' +cartItems)       
     return (
         <CartContext.Provider value={value}>
             {children}
