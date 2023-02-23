@@ -28,14 +28,25 @@ const addCartItem = (cartItems, productToAdd) => {
         
       ) 
 }
-
-
+/*const removeCartItem = (cartItems, productToRemove) => {
+cartItems.filter(
+    (cartItem)=>cartItem.id === productToRemove.id)
+//return removeCartItem;
+console.log(productToRemove)
+const myArray = [1,2,3,4,5];
+let newThing = myArray.filter(el => el > 2);
+return newThing;
+}*/
+const removeCartItem = (cartItems, itemToRemove) => {
+    const removeCartItemArray = cartItems.filter(el => itemToRemove.id)
+    console.log(itemToRemove)
+}
 export const CartContext = createContext({
     isCartOpen:true,
     setIsCartOpen:() => {},
     //cartItems: [],
     addItemtoCart: ()=> {},
-    
+    removeCartItem:()=> {},
     cartItemQuantity: () => {},
     cartTotals: () => {},
     setCartTotal: () => {}
@@ -63,7 +74,6 @@ export const CartProvider = ({children}) => {
             setCartTotal(cartTotals)
             console.log(cartTotals)
     }
-    
     
     useEffect(() => {
     const newTotals = cartItems.reduce( (total, cartItem) => total + cartItem.quantity,0)
