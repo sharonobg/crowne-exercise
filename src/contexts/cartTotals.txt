@@ -1,0 +1,5 @@
+const cartTotals2 = cartItems.reduce((a,v) =>  a = a + v.totalPrice , 0 )
+final:
+const cartTotals = (cartItems.reduce((cartItems ,b) =>  cartItems = cartItems + b.totalPrice , 0 ))
+    //console.log((data2.reduce((fish ,cat) =>  fish = fish + cat.prix , 0 )))
+    

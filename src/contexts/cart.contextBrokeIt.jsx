@@ -33,46 +33,38 @@ const addCartItem = (cartItems, productToAdd) => {
 export const CartContext = createContext({
     isCartOpen:true,
     setIsCartOpen:() => {},
-    //cartItems: [],
+    cartItems: [],
     addItemtoCart: ()=> {},
-    
+    //totals:0,
     cartItemQuantity: () => {},
-    cartTotals: () => {},
-    setCartTotal: () => {}
+   // cartTotal: () => {},
+    //setCartTotal: () => {}
 });
 
 export const CartProvider = ({children}) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [cartItems,setCartItems] = useState([]);
     const [totals,setTotals]=useState(0);
-    const [setCartTotal]=useState(0);
+    const [cartTotal,setCartTotal]=useState(0);
     
     const addItemToCart = (productToAdd) => {
         setCartItems(addCartItem(cartItems,productToAdd));
         //console.log(productToAdd.price) 
     }
-    /*const cartTotal = () => {
-        cartItems.reduce( (a,b) =>  a = a + b.totalPrice , 0 ) 
-        setCartTotal(cartTotal);
-        console.log(cartTotals)
-    }*/
-    const cartTotal = cartItems.reduce((a,v) =>  a = a + v.totalPrice , 0 )
-    console.log(cartTotal)
-    const cartTotals = (cartItems) => {
-        cartItems.reduce((a ,b) =>  a = a + b.totalPrice , 0 )
-            setCartTotal(cartTotals)
-            console.log(cartTotals)
-    }
-    
     
     useEffect(() => {
-    const newTotals = cartItems.reduce( (total, cartItem) => total + cartItem.quantity,0)
+    const newTotals = cartItems
+        .reduce( (total, cartItem) => total + cartItem.quantity,0)
             setTotals(newTotals);
         },[cartItems]);
 
+    const cartTotal = (cartItems, b) => {
+            cartItems.reduce( (a,b) =>  a = a + b.totalPrice , 0 )
+            setCartTotal(cartTotal)
+        }
     const value = {isCartOpen,setIsCartOpen,addItemToCart,cartItems,totals,cartTotal,setCartTotal};
     console.log(cartItems)
-    console.log(cartTotals)
+    console.log(cartTotal)
     console.log(totals)
     return (
         <CartContext.Provider value={value}>
