@@ -1,42 +1,59 @@
 .checkout-container {
-    .cart-item-container{height:auto;}
-    .cart-item-container .item-details {
-        width: 80%;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        padding: 10px 20px;
-        gap: 10px;
-        justify-content: space-evenly;
-    }
-    .cart-item-container .item-details > span {
-        display: inline-flex;
-        width: 20%;
-        justify-content: center;
-      }
-    
-    .cart-item-container .chevron:after,.chevron:before {
-        display: inline-block;
+  .item-details-header{font-size:1.2em;padding-bottom:20px;border-bottom:2px solid gray;}
+  .item-details-header>span,.item-details > span,.item-details > button {
+    display: inline-flex;
+    width: 20%;
+    justify-content: center;
+  }
+  
+  .button-container{
+    min-width: fit-content;
+    padding: 0 20px;
+    color: gray;
+    display: flex;
+    width: fit-content;
+    margin-left: auto;
+  }
+  img {max-width: 100%;}
+  .checkout-items .item-details,.item-details-header {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px 20px;
+    gap: 10px;
+    justify-content: space-evenly;
+    align-items:center;
+  }
+  .cart-total {
+    text-align: right;
+    display: flex;
+    flex: 0 0 40%;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 1.5em;
+    justify-content: center;
+    margin: 20px auto;
+  }
+  .checkout-items{font-size:1.2em;height:auto;
+    .button-container{min-width: fit-content;padding:0 20px;background: none;color:gray;}
+      
+      .item-details{margin-top: 20px;padding-bottom:20px;border-bottom:2px solid gray;}
+      .item-details-header,
+      
+      
+      .item-details > span img{max-width: 80%;}
+      .decreaseQ,.increaseQ{
+        cursor: pointer;
+        display:inline-block;
         font-size: 2em;
         line-height: 0;
         transform: translateY(6px);
-
-    }
-    .cart-item-container .chevron:after {content: '\0203A';}
-    .cart-item-container .chevron:before {content: '\2039';}
-
-    .cart-item-container img {
-        width: 10%;
-        height: auto;
       }
-    .dropD{display:none;}
-    .cart-total {
-      text-align: right;
-      display: flex;
-      flex: 0 0 40%;
-      flex-direction: column;
-      gap: 20px;
-      font-size: 1.5em;
-      justify-content: center;
+      .checkout-items img {
+          width: 10%;
+          height: auto;
+      }
+      
+    }
   }
-}

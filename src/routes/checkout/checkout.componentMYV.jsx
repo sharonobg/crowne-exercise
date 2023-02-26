@@ -6,16 +6,24 @@ import './checkout.styles.scss';
 
 const Checkout = () => {
     const {cartItems} = useContext(CartContext);
+    const {cartTotal} = useContext(CartContext);
     return(
             <div className='checkout-container'>
                 <div className='cart-items'>
                     {cartItems.map((item) => 
-                    (<CartItem key={item.id} cartItem={item} />
+                    (
+                        <CartItem key={item.id} cartItem={item} />
                     ))}
                 </div>
+                <div className="cart-total">
+                    Total Price: {cartTotal}
+                    <Button>PLACE ORDER</Button>
+                </div>
                 
-            <Button>PLACE ORDER</Button>
+            
         </div>
+        
     );
+   
 };
 export default Checkout;
