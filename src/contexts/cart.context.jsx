@@ -25,16 +25,41 @@ const addCartItem = (cartItems, productToAdd) => {
         
       ) 
 }
+//on click of the less than (left of quantity) reduce the quantity by 1
+const reduceCartItem = (cartItems,itemToReduce) => {
+    const existingCartItem = cartItems.find(
+        (cartItem)=>cartItem.id === itemToReduce.id
+        );
+    if(existingCartItem){
+         //if there is only 1 quantity remove the item
+        if(existingCartItem.quantity ===1){
+            return(cartItems.filter(cartItem => cartItem.id !== itemToReduce.id))
+    }
+    return cartItems.map( (cartItem) => 
+    cartItem.id === itemToReduce.id 
+    ? {...cartItem, 
+        quantity: cartItem.quantity - 1,
+        totalPrice:cartItem.totalPrice-cartItem.price}
+    :cartItem
+    )
+}  
+};
+//method removeItem completely: filter out the item you want to remove by its id
+const removeItem = (cartItems, productToRemove) => {
+    return cartItems.filter(cartItem => cartItem.id !== productToRemove.id)
+};
 
+ 
 
 export const CartContext = createContext({
     isCartOpen:true,
     setIsCartOpen:() => {},
     addItemtoCart: ()=> {},
-    removeCartItem:()=> {},
-    removeItemFromCart: ()=> {},
-    cartTotals: () => {},
-    setCartTotal: () => {}
+    reduceItemFromCart:()=> {},
+    removeItem: ()=> {},
+    newCartTotalPrice: 0,
+    totals:0,
+
     
 });
 
@@ -42,63 +67,45 @@ export const CartProvider = ({children}) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [cartItems,setCartItems] = useState([]);
     const [totals,setTotals]=useState(0);
-    const [setCartTotal]=useState(0);
+    const [cartTotalPrice,setCartTotalPrice] = useState(0);
+    
 
     const addItemToCart = (productToAdd) => {
         setCartItems(addCartItem(cartItems,productToAdd));
     };
     
+    //filter out the item you want to remove by its id
+    const reduceItemFromCart = (itemToReduce) => {
+        setCartItems(reduceCartItem(cartItems,itemToReduce));
+    };
     
-    const removeCartItem = (cartItems,itemToRemove) => {
-        console.log(itemToRemove);
-        const existingCartItem = cartItems.find(
-            (cartItem)=>cartItem.id === itemToRemove.id
-            );
-        if(existingCartItem){
-            if(existingCartItem.quantity ===1){
-                return(cartItems.filter(cartItem => cartItem.id !== itemToRemove.id))
-        }}
-        return cartItems.map( (cartItem) => 
-        cartItem.id === itemToRemove.id 
-        ? {...cartItem, quantity: cartItem.quantity - 1,totalPrice:cartItem.quantity*cartItem.price-cartItem.price}
-        :cartItem
-        );  
-    };
-    const removeItemFromCart = (itemToRemove) => {
-        setCartItems(removeCartItem(cartItems,itemToRemove));
-    };
-    const removeItem = (cartItems, productToRemove) => {
-        return cartItems.filter(cartItem => cartItem.id !== productToRemove.id)
-    };
+    //after removing item - return new arry of cartItems with out it
     const clearItem = (productToRemove) => {
         setCartItems(removeItem(cartItems,productToRemove));
     }
-    const cartTotal = cartItems.reduce((a,v) =>  a = a + v.totalPrice , 0 );
-
-    const cartTotals = (cartItems) => {
-        cartItems.reduce((a ,b) =>  a = a + b.totalPrice , 0 )
-            setCartTotal(cartTotals)
-            console.log(cartTotals)
-    };
     
+
+    //this is for the icon-component icon has total number of cart items
     useEffect(() => {
-    const newTotals = cartItems.reduce( (total, cartItem) => total + cartItem.quantity,0)
-            setTotals(newTotals);
+    const totals = cartItems.reduce( (total, cartItem) => total + cartItem.quantity,0)
+       setTotals(totals);
         },[cartItems]);
+    useEffect(() => {
+        const cartTotalPrice = cartItems.reduce((prevTotal, cartItem) =>  prevTotal + cartItem.quantity * cartItem.price, 0);
+        setCartTotalPrice(cartTotalPrice);
+    },[cartItems]);
 
-    
     const value = {
         isCartOpen,setIsCartOpen,
         addItemToCart,
         cartItems,
         totals,
-        cartTotal,setCartTotal,
-        removeCartItem,
-        removeItemFromCart,
-        clearItem
+        cartTotalPrice,
+        reduceCartItem,
+        reduceItemFromCart,
+        clearItem,
+        setCartTotalPrice
     };
-    //console.log(cartTotals)
-    //console.log(totals)
     return (
         <CartContext.Provider value={value}>
             {children}
