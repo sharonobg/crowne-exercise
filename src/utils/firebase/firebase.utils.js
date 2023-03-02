@@ -13,7 +13,11 @@ import {
   getFirestore,
   doc,//retrieve documents from db
   getDoc,//get document data
-  setDoc //set document data
+  setDoc, //set document data
+  collection,
+  writeBatch,
+  query,
+  getDocs
 } from 'firebase/firestore';
 const firebaseConfig = {
     apiKey: "AIzaSyANqHRAwsCjwUEG4fAFg6CMgTRuktKfZEM",
@@ -37,6 +41,32 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();//access db
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  //since adding to external source sill be async
+  const collectionRef = collection(db, collectionKey);
+  //success means transaction- objectsToAdd successfully added
+  const batch = writeBatch(db);//batch to instance(db)
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef,object.title.toLowerCase());
+    batch.set(docRef,object);
+  });
+  await batch.commit();
+  console.log('done');
+};
+export const getCategoriesAndDocments = async () => {
+  //firestore methods- these utility functions help incase 3rd party libraries change we can update the method without staring over
+  const collectionRef = collection(db,'categories');
+  const q = query(collectionRef);
+  const querySnapshot = await getDocs(q);
+  //accumulator is first arg:
+  const categoryMap = querySnapshot.docs.reduce( (acc, docSnapshot) => {
+    const{title,items} = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  },{});
+  return categoryMap;
+}
 
 export const createUserDocumentFromAuth = async (
   userAuth,additionaInformation = {}
