@@ -45,7 +45,7 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
   //since adding to external source sill be async
   const collectionRef = collection(db, collectionKey);
   //success means transaction- objectsToAdd successfully added
-  const batch = writeBatch(db);//batch to instance(db)
+  const batch = writeBatch(db);//batch objects to instance(db)
 
   objectsToAdd.forEach((object) => {
     const docRef = doc(collectionRef,object.title.toLowerCase());
